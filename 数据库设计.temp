@@ -1,0 +1,128 @@
+自行设计至少 5 张表（用户、书籍、购物车、订单主表、订单明细），包含合理字段、主外键、索引
+
+数据库
+CREATE DATABASE bookstore
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_general_ci;
+
+访问接口localhost:3306
+CREATE USER 'mybatis_for_bookstore'@'localhost' IDENTIFIED BY 'bookstore1116';
+
+用户 info_users
+
+id 自增主键
+uuid 用户唯一识别码
+user_name 用户名
+password 密码
+phone 手机号
+email 邮箱
+role 角色
+is_deleted 注销状态
+create_at 创建时间
+update_at 更新时间
+delete_at 注销时间
+
+CREATE TABLE info_users (
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY ,
+    uuid CHAR(36) NOT NULL UNIQUE COMMENT 'UUID',
+    user_name VARCHAR(30) NOT NULL UNIQUE COMMENT '用户名',
+    password VARCHAR(255) NOT NULL COMMENT '密码（已加密）',
+    email VARCHAR(30) UNIQUE COMMENT '邮箱',
+    phone VARCHAR(20) UNIQUE COMMENT '手机号',
+    role ENUM('user', 'admin') DEFAULT 'USER' COMMENT '角色',
+    is_deleted TINYINT(1) DEFAULT 0 COMMENT '注销状态',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    delete_at DATETIME DEFAULT NULL COMMENT '注销时间'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '用户表';
+
+可能的exception：用户名重复，手机号重复,邮箱重复
+
+书籍 info_books
+
+id 自增主键
+uuid 书籍唯一识别码
+title 书名
+author 作者
+price 售价
+description 简介
+stock_quantity 库存
+is_available 是否在售
+is_deleted 删除状态
+create_at 上架时间
+delete_at 删除时间
+
+CREATE TABLE info_books (
+    book_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) NOT NULL UNIQUE COMMENT 'UUID',
+    title VARCHAR(100) NOT NULL COMMENT '书名',
+    author VARCHAR(100) NOT NULL COMMENT '作者',
+    price DECIMAL(10, 2) NOT NULL COMMENT '售价',
+    description TEXT COMMENT '简介',
+    stock_quantity INT DEFAULT 0 COMMENT '库存',
+    is_available TINYINT(1) DEFAULT 1 COMMENT '是否在售',
+    is_deleted TINYINT(1) DEFAULT 0 COMMENT '删除状态',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '上架时间',
+    delete_at DATETIME DEFAULT NULL COMMENT '删除时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '书籍表';
+
+
+购物车 carts
+
+id 自增主键
+user_id 外键所属用户
+book_id 外键商品
+is_deleted 删除状态
+create_at 加入时间
+delete_at 删除时间
+
+CREATE TABLE info_books (
+    cart_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL COMMENT '所属用户id',
+    book_id BIGINT NOT NULL COMMENT '商品id',
+    is_deleted TINYINT(1) DEFAULT 0 COMMENT '删除状态',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+    delete_at DATETIME DEFAULT NULL COMMENT '删除时间',
+    FOREIGN KEY (user_id) REFERENCES info_users (user_id),
+    FOREIGN KEY (book_id) REFERENCES info_books (book_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '购物车';
+
+必须软件判断商品的在售状态
+
+
+
+订单主表 orders
+
+order_id 自增主键
+order_no 订单号
+user_id 下单用户
+total_price 成交价格
+create_at 下单时间
+
+CREATE TABLE orders(
+    order_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id_time VARCHAR(32) NOT NULL UNIQUE COMMENT '订单号',
+    user_id BIGINT NOT NULL COMMENT '下单用户',
+    total_price DECIMAL(10, 2) NOT NULL COMMENT '订单价格',
+    create_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
+    FOREIGN KEY (user_id) REFERENCES info_users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '订单主表';
+
+
+订单明细 order_detail
+order_detail_id 自增主键
+order_id 所属订单号
+book_id 商品id
+quantity 数量
+price 商品单价
+
+CREATE TABLE order_detail(
+    order_detail_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL COMMENT '订单id',
+    book_id BIGINT NOT NULL COMMENT '商品id',
+    quantity INT COMMENT '购买数量',
+    price DECIMAL(10,2) COMMENT '商品单价',
+    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+    FOREIGN KEY (book_id) REFERENCES info_books (book_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '订单明细';
+
