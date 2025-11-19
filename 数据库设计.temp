@@ -40,7 +40,7 @@ CREATE TABLE info_users (
 
 书籍 info_books
 
-id 自增主键
+book_id 自增主键
 book_uuid 书籍唯一识别码
 title 书名
 author 作者
