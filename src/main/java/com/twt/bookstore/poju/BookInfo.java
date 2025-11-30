@@ -20,7 +20,7 @@ import lombok.Setter;
 public class BookInfo {
     private Long id;    //主键id
     private UUID uuid;  //uuid
-    private String name;    //书名
+    private String title;    //书名
     private String author;  //作者
     private BigDecimal price;   //单价
     private String description; //简介
