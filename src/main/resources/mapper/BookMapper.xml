@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.twt.bookstore.mapper.BookRepository">
+
+  <!-- 根据UUID获取主键id -->
+  <select id="queryIdByUUID" resultType="java.lang.Long">
+    select book_id from info_books 
+    where
+     book_uuid = #{uuid}
+     AND is_deleted = 0;
+  </select>
+
+  <!-- 按照书籍名称模糊查找 -->
+  <select id="queryByName" resultType="com.twt.bookstore.poju.BookInfo">
+    select * from info_books 
+    where
+     title LIKE CONCAT('%', #{title}, '%')
+     AND is_deleted = 0;
+  </select>
+
+  <!-- 按照书籍作者模糊查找 -->
+  <select id="queryByAuthor" resultType="com.twt.bookstore.poju.BookInfo">
+    select * from info_books 
+    where
+    author LIKE CONCAT('%', #{author}, '%')
+    AND is_deleted = 0
+    ORDER BY book_id;
+  </select>
+
+  <!-- 按照UUID唯一确定书籍 -->
+  <select id="queryByUUID" resultType="com.twt.bookstore.poju.BookInfo">
+    select * from info_books 
+    where
+     book_uuid = #{uuid}
+     AND is_deleted = 0;
+  </select>
+
+  <!-- 获取未删除书籍条目总数 -->
+  <select id="getTotalCount" resultType="com.twt.bookstore.poju.BookInfo">
+    select COUNT(*) from info_books
+    where
+     is_deleted = 0;
+  </select>
+
+<!-- 管理员更新书籍信息 -->
+  <update id="updateBookFields" parameterType="com.example.model.BookInfo">
+      UPDATE info_books
+      <set>
+          <!-- 管理员修改信息等场景 -->
+          <if test="title != null">title = #{title},</if>
+          <if test="author != null">author = #{author},</if>
+          <if test="price != null">price = #{price},</if>
+          <if test="description != null">description = #{description},</if>
+          <if test="StockQuantity != 0 or StockQuantity != null">stock_quantity = #{StockQuantity},</if>
+          <if test="isAvalable != null">is_available = #{isAvalable},</if>
+          <if test="isDelete != null and isDelete == true">
+              is_deleted = 1,
+              delete_at = CURRENT_TIMESTAMP
+          </if>
+      </set>
+      WHERE book_id = #{id}
+      AND is_deleted = 0
+  </update>
+
+  <!-- 库存变更 -->
+  <update id ="updateStockQuantity" parameterType = "int">
+    UPDATE info_books
+      <set>
+        stock_quantity = stock_quantity + changeQuantity
+      </set>
+    WHERE book_id = #{id}
+    AND is_deleted = 0;
+</mapper>
