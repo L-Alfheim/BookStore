@@ -109,6 +109,7 @@ public class BookRepositoryImpl implements BookRepository {
      * 更新书籍相关
      * @param book 书籍对象
      * @return int 影响的行数
+     * @throws SqlException 202
      */
     @Override
     public int updateBookFields(BookInfo book) throws SqlException {
@@ -124,6 +125,7 @@ public class BookRepositoryImpl implements BookRepository {
      * @param bookId 书籍ID
      * @param changeQuantity Integer 增减数量，正为增加库存，负为减少库存
      * @return int 影响的行数
+     * @throws SqlException 202
     */
    @Override
     public int updateStockQuantity(Long id, Integer changeQuantity) throws SqlException {
@@ -142,6 +144,7 @@ public class BookRepositoryImpl implements BookRepository {
      * 添加书籍
      * @param book 书籍对象
      * @return int 影响的行数
+     * @throws SqlException 202
      */
     @Override
     public int insertBookFields(BookInfo book) throws SqlException {

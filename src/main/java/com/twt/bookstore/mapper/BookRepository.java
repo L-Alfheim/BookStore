@@ -60,6 +60,7 @@ public interface BookRepository {
      * 更新书籍相关
      * @param book 书籍对象
      * @return int 影响的行数
+     * @throws SqlException 202
      */
     int updateBookFields(BookInfo book) throws SqlException;
 
@@ -68,6 +69,7 @@ public interface BookRepository {
      * @param bookId 书籍ID
      * @param changeQuantity 变动数量 (正数为增加库存，负数为减少库存)
      * @return 影响的行数
+     * @throws SqlException 202
      */
     int updateStockQuantity(Long bookId, Integer changeQuantity) throws SqlException;
 
@@ -75,6 +77,7 @@ public interface BookRepository {
      * 添加书籍
      * @param book 书籍对象
      * @return int 影响的行数
+     * @throws SqlException 202
      */
     public int insertBookFields(BookInfo book) throws SqlException;
 }
