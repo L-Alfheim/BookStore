@@ -57,16 +57,9 @@ public interface BookRepository {
     public List<BookInfo> queryByPage() throws SqlException;
 
     /**
-     * 动态更新书籍字段。
-     * 使用场景:
-     * 1. 管理员修改书籍信息 (如: title, price, isAvailable)。
-     * 2. 用户下单/取消订单时更新库存 (stockQuantity)。
-     * 3. 逻辑删除书籍 (isDeleted)。
-     *
-     * 只会更新传入对象中非空或需要变更的字段。
-     *
-     * @param book 要更新的书籍信息对象 (必须包含 bookId)
-     * @return 影响的行数
+     * 更新书籍相关
+     * @param book 书籍对象
+     * @return int 影响的行数
      */
     int updateBookFields(BookInfo book) throws SqlException;
 
