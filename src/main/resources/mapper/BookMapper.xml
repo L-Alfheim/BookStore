@@ -45,7 +45,7 @@
   </select>
 
 <!-- 管理员更新书籍信息 -->
-  <update id="updateBookFields" parameterType="com.example.model.BookInfo">
+  <update id="updateBookFields" parameterType="com.twt.bookstore.poju.BookInfo">
       UPDATE info_books
       <set>
           <!-- 管理员修改信息等场景 -->
@@ -65,11 +65,38 @@
   </update>
 
   <!-- 库存变更 -->
-  <update id ="updateStockQuantity" parameterType = "int">
+  <update id="updateStockQuantity" parameterType="int">
     UPDATE info_books
       <set>
         stock_quantity = stock_quantity + changeQuantity
       </set>
     WHERE book_id = #{id}
     AND is_deleted = 0;
+  </update>
+  
+  <!-- 插入书籍 -->
+  <insert id="insertBookFields" parameterType="com.twt.bookstore.poju.BookInfo" useGeneratedKeys="true" keyProperty="book_id">
+      INSERT INTO info_books
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="bookUuid != null">book_uuid,</if> 
+          <if test="title != null">title,</if>
+          <if test="author != null">author,</if>
+          <if test="price != null">price,</if>
+          <if test="description != null">description,</if>
+          <if test="stockQuantity != null">stock_quantity,</if>
+          <if test="isAvailable != null">is_available,</if>
+          <if test="isDeleted != null">is_deleted,</if>
+      </trim>
+      VALUES
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="bookUuid != null">#{bookUuid},</if>
+          <if test="title != null">#{title},</if>
+          <if test="author != null">#{author},</if>
+          <if test="price != null">#{price},</if>
+          <if test="description != null">#{description},</if>
+          <if test="stockQuantity != null">#{stockQuantity},</if>
+          <if test="isAvailable != null">#{isAvailable},</if>
+          <if test="isDeleted != null">#{isDeleted},</if>
+      </trim>
+  </insert>
 </mapper>

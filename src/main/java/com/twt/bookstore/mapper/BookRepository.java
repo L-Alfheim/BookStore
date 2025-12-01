@@ -71,12 +71,17 @@ public interface BookRepository {
     int updateBookFields(BookInfo book) throws SqlException;
 
     /**
-     * 专门用于更新库存的原子操作。
-     * 适用于用户下单等场景，直接对库存字段进行加减操作，而非替换值。
-     *
+     * 更新库存
      * @param bookId 书籍ID
      * @param changeQuantity 变动数量 (正数为增加库存，负数为减少库存)
      * @return 影响的行数
      */
     int updateStockQuantity(Long bookId, Integer changeQuantity) throws SqlException;
+
+    /**
+     * 添加书籍
+     * @param book 书籍对象
+     * @return int 影响的行数
+     */
+    public int insertBookFields(BookInfo book) throws SqlException;
 }

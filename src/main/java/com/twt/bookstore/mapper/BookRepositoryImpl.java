@@ -118,24 +118,37 @@ public class BookRepositoryImpl implements BookRepository {
             throw new SqlException(202, "errors occurs when updateBookFields, UUID: " + book.getUuid(), e);
         }
     }
-
+    
     /**
      * 更新库存
      * @param bookId 书籍ID
      * @param changeQuantity Integer 增减数量，正为增加库存，负为减少库存
      * @return int 影响的行数
-     */
-    @Override
+    */
+   @Override
     public int updateStockQuantity(Long id, Integer changeQuantity) throws SqlException {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("bookId", id);
             params.put("changeQuantity", changeQuantity);
-    
+            
             return sqlSessionTemplate.update("updateStockQuantity", params);
         } catch (Exception e) {
             throw new SqlException(202,"errors occurs when updateBookFields, book_id: " + id, e);
         }
     }
-
+    
+    /**
+     * 添加书籍
+     * @param book 书籍对象
+     * @return int 影响的行数
+     */
+    @Override
+    public int insertBookFields(BookInfo book) throws SqlException {
+        try{
+            return sqlSessionTemplate.update("insertBookFields", book);
+        } catch(Exception e) {
+            throw new SqlException(202, "errors occurs when insertBookFields, UUID: " + book.getUuid(), e);
+        }
+    }
 }
