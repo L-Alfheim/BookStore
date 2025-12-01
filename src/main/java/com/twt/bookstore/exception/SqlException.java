@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * mapper异常类
- * errorCode 错误码101表示需要返回前端具体信息，202表示后端内部错误
+ * mapper异常类，继承自Exception，必须在service里手动catch
+ * 必须在service里手动回滚
+ * mapper层异常时会抛出这个异常
+ * errorCode 错误码101表示需要手动判断是否是数据库唯一字段重复，202表示后端内部错误
  */
 @Setter
 @Getter

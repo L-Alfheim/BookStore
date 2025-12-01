@@ -149,7 +149,7 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public int insertBookFields(BookInfo book) throws SqlException {
         try{
-            return sqlSessionTemplate.update("insertBookFields", book);
+            return sqlSessionTemplate.insert("insertBookFields", book);
         } catch(Exception e) {
             throw new SqlException(202, "errors occurs when insertBookFields, UUID: " + book.getUuid(), e);
         }
