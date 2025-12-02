@@ -3,12 +3,9 @@ package com.twt.bookstore.mapper;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.twt.bookstore.exception.SqlException;
 import com.twt.bookstore.poju.BookInfo;
 
-@Mapper
 public interface BookRepository {
     /**
      * 根据UUID查找主键id

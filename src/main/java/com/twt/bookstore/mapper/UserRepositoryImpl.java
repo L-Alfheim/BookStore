@@ -4,10 +4,12 @@ import java.util.UUID;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.twt.bookstore.exception.SqlException;
 import com.twt.bookstore.poju.UserInfo;
 
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     //获取sqlSessionTemplate
