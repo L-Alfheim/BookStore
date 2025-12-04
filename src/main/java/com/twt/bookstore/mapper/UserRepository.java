@@ -8,11 +8,18 @@ import com.twt.bookstore.poju.UserInfo;
 public interface UserRepository {
 
     /**
-     * 按照uuid 查找单一用户
-     * 如果要获取用户主键id，也使用这个方法
+     * 按照uuid 查找主键id
      * @param uuid
      * @return result UserInfo 若不存在返回null
-     * @throws SqlException 202
+     * @throws SqlException 101 数据重复，返回前端；202 数据库错误
+     */
+    Long queryIdByUUID(UUID uuid) throws SqlException;
+
+    /**
+     * 按照UUID查找用户
+     * @param uuid
+     * @return UserInfo
+     * @throws SqlException 101 数据重复，返回前端；202 数据库错误
      */
     UserInfo queryByUUID(UUID uuid) throws SqlException;
 

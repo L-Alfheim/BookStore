@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import com.twt.bookstore.exception.SqlException;
@@ -17,18 +18,32 @@ public class UserRepositoryImpl implements UserRepository {
     private SqlSessionTemplate sqlSessionTemplate;
 
     /**
-     * 按照uuid 查找单一用户
-     * 如果要获取用户主键id，也使用这个方法
+     * 按照uuid 查找主键id
      * @param uuid
      * @return result UserInfo 若不存在返回null
-     * @throws SqlException 202
+     * @throws SqlException 101 数据重复，返回前端；202 数据库错误
+     */
+    @Override
+    public Long queryIdByUUID(UUID uuid) throws SqlException {
+        try {
+            return sqlSessionTemplate.selectOne("queryIdByUUID", uuid);
+        } catch(Exception e) {
+            //查询出现错误
+            throw new SqlException(202, "errors occurs when queryIdByUUID", e);
+        }
+    }
+
+    /**
+     * 按照UUID查找用户
+     * @param uuid
+     * @return UserInfo
+     * @throws SqlException 101 数据重复，返回前端；202 数据库错误
      */
     @Override
     public UserInfo queryByUUID(UUID uuid) throws SqlException {
         try {
             return sqlSessionTemplate.selectOne("queryByUUID", uuid);
-        } catch(Exception e) {
-            //查询出现错误
+        } catch (Exception e) {
             throw new SqlException(202, "errors occurs when queryByUUID", e);
         }
     }
@@ -44,8 +59,12 @@ public class UserRepositoryImpl implements UserRepository {
         
         try {
             return sqlSessionTemplate.insert("insertUserFields", userInfo);
+        } catch(DuplicateKeyException e) {
+            //数据字段重复
+            throw new SqlException(101, "Field value duplication", e);
         } catch (Exception e) {
-            throw new SqlException(101, "errors occurs when insertUserFields", e);
+            //其他数据库异常
+            throw new SqlException(202, "errors occurs when insertUserFields", e);
         }
     }
 
@@ -59,7 +78,11 @@ public class UserRepositoryImpl implements UserRepository {
     public int updateUserFields(UserInfo userInfo) throws SqlException {
         try {
             return sqlSessionTemplate.update("updateUserFields", userInfo);
+        } catch(DuplicateKeyException e) {
+            //数据字段重复
+            throw new SqlException(101, "Field value duplication", e);
         } catch (Exception e) {
+            //其他数据库错误
             throw new SqlException(101, "errors occurs when updateUserFields", e);
         }
     }
