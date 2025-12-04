@@ -24,9 +24,9 @@ public class BookInfo {
     private String author;  //作者
     private BigDecimal price;   //单价
     private String description; //简介
-    private Integer StockQuantity;  //库存
-    private boolean isAvalable; //在售状态
-    private boolean isDelete;   //删除状态
+    private Integer stockQuantity;  //库存
+    private boolean isAvailable; //在售状态
+    private boolean isDeleted;   //删除状态
     private Instant createTime;   //上架时间
     private Instant deleteTime;   //删除时间
 

@@ -23,7 +23,7 @@ public class UserInfo {
     private String phone;   //手机号
     private String email;   //邮箱
     private UserRole role;  //权限角色
-    private boolean isDelete;   //删除状态
+    private boolean isDeleted;   //删除状态
     private Instant createTime;   //创建时间
     private Instant updateTime;   //更新时间
     private Instant deleteTime;   //删除时间

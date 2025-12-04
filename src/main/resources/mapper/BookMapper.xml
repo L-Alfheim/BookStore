@@ -53,9 +53,9 @@
           <if test="author != null">author = #{author},</if>
           <if test="price != null">price = #{price},</if>
           <if test="description != null">description = #{description},</if>
-          <if test="StockQuantity != 0 or StockQuantity != null">stock_quantity = #{StockQuantity},</if>
-          <if test="isAvalable != null">is_available = #{isAvalable},</if>
-          <if test="isDelete != null and isDelete == true">
+          <if test="stockQuantity != 0 or stockQuantity != null">stock_quantity = #{stockQuantity},</if>
+          <if test="isAvailable != null">is_available = #{isAvailable},</if>
+          <if test="isDeleted != null and isDeleted == true">
               is_deleted = 1,
               delete_at = CURRENT_TIMESTAMP
           </if>
@@ -75,10 +75,10 @@
   </update>
   
   <!-- 插入书籍 -->
-  <insert id="insertBookFields" parameterType="com.twt.bookstore.poju.BookInfo" useGeneratedKeys="true" keyProperty="book_id">
+  <insert id="insertBookFields" parameterType="com.twt.bookstore.poju.BookInfo" useGeneratedKeys="true" keyProperty="id">
       INSERT INTO info_books
       <trim prefix="(" suffix=")" suffixOverrides=",">
-          <if test="bookUuid != null">book_uuid,</if> 
+          <if test="uuid != null">book_uuid,</if> 
           <if test="title != null">title,</if>
           <if test="author != null">author,</if>
           <if test="price != null">price,</if>
@@ -89,7 +89,7 @@
       </trim>
       VALUES
       <trim prefix="(" suffix=")" suffixOverrides=",">
-          <if test="bookUuid != null">#{bookUuid},</if>
+          <if test="uuid != null">#{uuid},</if>
           <if test="title != null">#{title},</if>
           <if test="author != null">#{author},</if>
           <if test="price != null">#{price},</if>
