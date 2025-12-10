@@ -13,6 +13,11 @@
     select * from info_users where user_uuid = #{uuid} AND is_deleted = 0;
   </select>
 
+<!-- 通过用户名查找用户 -->
+  <select id="queryByUsername" resultType="com.twt.bookstore.poju.UserInfo">
+    select * from info_users where user_name = #{name} AND is_deleted = 0;
+  </select>
+
 <!-- 新增用户 -->
   <insert id="insertUserFields" parameterType="com.twt.bookstore.poju.UserInfo" useGeneratedKeys="true" keyProperty="user_id">
       INSERT INTO info_users

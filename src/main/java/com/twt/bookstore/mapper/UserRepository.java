@@ -23,6 +23,14 @@ public interface UserRepository {
      */
     UserInfo queryByUUID(UUID uuid) throws SqlException;
 
+        /**
+     * 按照用户名查找用户
+     * @param name 用户名
+     * @return UserInfo
+     * @throws SqlException 202 数据库错误
+     */
+    public UserInfo queryByUsername(String name) throws SqlException;
+
     /**
      * 添加人员信息
      * @param userInfo UserInfo 人员信息对象

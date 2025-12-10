@@ -49,6 +49,21 @@ public class UserRepositoryImpl implements UserRepository {
     }
     
     /**
+     * 按照用户名查找用户
+     * @param name 用户名
+     * @return UserInfo
+     * @throws SqlException 202 数据库错误
+     */
+    @Override
+    public UserInfo queryByUsername(String name) throws SqlException {
+        try{
+            return sqlSessionTemplate.selectOne("queryByUsername", name);
+        } catch (Exception e) {
+            throw new SqlException(202, "errors occurs when queryByUsername", e);
+        }
+    }
+    
+    /**
      * 添加人员信息
      * @param userInfo UserInfo 人员信息对象
      * @return int 受影响的行数
