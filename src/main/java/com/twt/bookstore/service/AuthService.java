@@ -39,7 +39,7 @@ public class AuthService {
      * @throws SqlException 数据库后端内部错误，回滚
      */
     @Transactional(rollbackFor = SqlException.class, noRollbackFor = BusinessException.class)
-    public void register(UserRegister request) throws BusinessException, SqlException {
+    public UserResponse register(UserRegister request) throws BusinessException, SqlException {
         // 密码是否为空
         if (request.password() == null || request.password().trim().isEmpty()) {
              throw new BusinessException(101, "password should not be blank");
@@ -67,10 +67,12 @@ public class AuthService {
             if (affectedRows != 1) {
                 throw new SqlException(202, "the affect row should be 1, but it is not, and no other exception is thrown");
             }
+
+            return new UserResponse(null, newUser.getUserName(), newUser.getRole());
         } catch (SqlException e) {
             // 手动处理101的信息重复，其他自动回滚
             if (e.getErrorCode() == 101) {
-                throw new BusinessException(101, "phone number or email have exsited", e);
+                throw new BusinessException(101, "username, phone number or email have exsited", e);
             } else {
                 // 其他数据库错误(202)自动回滚
                 throw e;
