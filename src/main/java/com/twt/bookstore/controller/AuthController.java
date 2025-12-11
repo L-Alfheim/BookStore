@@ -1,16 +1,14 @@
 package com.twt.bookstore.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.twt.bookstore.dto.request.UserLogin;
+import com.twt.bookstore.dto.request.UserRegister;
 import com.twt.bookstore.dto.response.BaseResponse;
 import com.twt.bookstore.dto.response.UserResponse;
-import com.twt.bookstore.dto.request.UserRegister;
 import com.twt.bookstore.exception.BusinessException;
 import com.twt.bookstore.exception.SqlException;
 import com.twt.bookstore.service.AuthService;

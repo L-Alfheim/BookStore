@@ -5,5 +5,8 @@ package com.twt.bookstore.poju;
  * 用户，管理员
  */
 public enum UserRole {
-    admin,user
+    admin,user;
+    public static UserRole roleFromString(String roleString) {
+        return UserRole.valueOf(roleString);
+    }
 }
