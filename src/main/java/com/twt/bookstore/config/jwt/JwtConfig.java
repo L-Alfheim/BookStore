@@ -1,4 +1,4 @@
-package com.twt.bookstore.config;
+package com.twt.bookstore.config.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

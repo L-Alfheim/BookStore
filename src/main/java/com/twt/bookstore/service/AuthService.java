@@ -16,7 +16,7 @@ import com.twt.bookstore.exception.SqlException;
 import com.twt.bookstore.mapper.UserRepository;
 import com.twt.bookstore.poju.UserInfo;
 import com.twt.bookstore.poju.UserRole;
-import com.twt.bookstore.security.Jwt;
+import com.twt.bookstore.security.util.Jwt;
 
 import lombok.RequiredArgsConstructor;
 

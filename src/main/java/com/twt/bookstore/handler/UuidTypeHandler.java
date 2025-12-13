@@ -1,4 +1,4 @@
-package com.twt.bookstore.config;
+package com.twt.bookstore.handler;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

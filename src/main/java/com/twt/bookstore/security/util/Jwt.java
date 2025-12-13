@@ -1,4 +1,4 @@
-package com.twt.bookstore.security;
+package com.twt.bookstore.security.util;
 
 import java.util.Date;
 import java.util.HexFormat;
@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
 
-import com.twt.bookstore.config.JwtConfig;
+import com.twt.bookstore.config.jwt.JwtConfig;
 import com.twt.bookstore.dto.userContext.UserContext;
 import com.twt.bookstore.exception.JwtSecurityException;
 

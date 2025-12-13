@@ -1,4 +1,4 @@
-package com.twt.bookstore.config;
+package com.twt.bookstore.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
