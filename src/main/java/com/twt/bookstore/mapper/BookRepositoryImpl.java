@@ -131,12 +131,12 @@ public class BookRepositoryImpl implements BookRepository {
     public int updateStockQuantity(Long id, Integer changeQuantity) throws SqlException {
         try {
             Map<String, Object> params = new HashMap<>();
-            params.put("bookId", id);
+            params.put("id", id);
             params.put("changeQuantity", changeQuantity);
             
             return sqlSessionTemplate.update("updateStockQuantity", params);
         } catch (Exception e) {
-            throw new SqlException(202,"errors occurs when updateBookFields, book_id: " + id, e);
+            throw new SqlException(202,"errors occurs when updateStockQuantity, book_id: " + id, e);
         }
     }
     

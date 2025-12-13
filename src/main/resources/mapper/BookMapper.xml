@@ -4,6 +4,21 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.twt.bookstore.mapper.BookRepository">
 
+<resultMap id="BookInfoResultMap" type="com.twt.bookstore.poju.BookInfo">
+    <id column="book_id" property="id"/>
+    <result column="book_uuid" property="uuid"/>
+    <result column="title" property="title"/>
+    <result column="author" property="author"/>
+    <result column="price" property="price"/>
+    <result column="description" property="description"/>
+    <result column="stock_quantity" property="stockQuantity"/>
+    <result column="is_available" property="isAvailable"/>
+    <result column="is_deleted" property="isDeleted"/>
+    <result column="create_at" property="createTime"/>
+    <result column="updated_at" property="updateTime"/>
+    <result column="delete_at" property="deleteTime"/>
+  </resultMap>
+
   <!-- 根据UUID获取主键id -->
   <select id="queryIdByUUID" resultType="java.lang.Long">
     select book_id from info_books 
@@ -13,7 +28,7 @@
   </select>
 
   <!-- 按照书籍名称模糊查找 -->
-  <select id="queryByName" resultType="com.twt.bookstore.poju.BookInfo">
+  <select id="queryByName" resultMap="BookInfoResultMap">
     select * from info_books 
     where
      title LIKE CONCAT('%', #{title}, '%')
@@ -21,7 +36,7 @@
   </select>
 
   <!-- 按照书籍作者模糊查找 -->
-  <select id="queryByAuthor" resultType="com.twt.bookstore.poju.BookInfo">
+  <select id="queryByAuthor" resultMap="BookInfoResultMap">
     select * from info_books 
     where
     author LIKE CONCAT('%', #{author}, '%')
@@ -30,7 +45,7 @@
   </select>
 
   <!-- 按照UUID唯一确定书籍 -->
-  <select id="queryByUUID" resultType="com.twt.bookstore.poju.BookInfo">
+  <select id="queryByUUID" resultMap="BookInfoResultMap">
     select * from info_books 
     where
      book_uuid = #{uuid}
@@ -38,7 +53,7 @@
   </select>
 
   <!-- 获取未删除书籍条目总数 -->
-  <select id="getTotalCount" resultType="com.twt.bookstore.poju.BookInfo">
+  <select id="getTotalCount">
     select COUNT(*) from info_books
     where
      is_deleted = 0;
@@ -53,12 +68,13 @@
           <if test="author != null">author = #{author},</if>
           <if test="price != null">price = #{price},</if>
           <if test="description != null">description = #{description},</if>
-          <if test="stockQuantity != 0 or stockQuantity != null">stock_quantity = #{stockQuantity},</if>
+          <if test="stockQuantity != null">stock_quantity = #{stockQuantity},</if>
           <if test="isAvailable != null">is_available = #{isAvailable},</if>
           <if test="isDeleted != null and isDeleted == true">
               is_deleted = 1,
               delete_at = CURRENT_TIMESTAMP
           </if>
+          updated_at = CURRENT_TIMESTAMP,
       </set>
       WHERE book_id = #{id}
       AND is_deleted = 0

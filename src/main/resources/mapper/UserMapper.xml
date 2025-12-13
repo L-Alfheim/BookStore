@@ -7,11 +7,15 @@
 <resultMap id="UserInfoResultMap" type="com.twt.bookstore.poju.UserInfo">
     <id column="user_id" property="id"/>
     <result column="user_uuid" property="uuid"/>
-    
-    <result column="password" property="passwordEncoder"/> 
-    
     <result column="user_name" property="userName"/>
-    <result column="is_deleted" property="deleted"/> <result column="create_at" property="createTime"/>
+    <result column="password" property="passwordEncoder"/> 
+    <result column="phone" property="phone"/>
+    <result column="email" property="email"/>
+    <result column="role" property="role" 
+            jdbcType="VARCHAR" 
+            javaType="com.twt.bookstore.poju.UserRole" />
+    <result column="is_deleted" property="isDeleted"/>
+    <result column="create_at" property="createTime"/>
     <result column="updated_at" property="updateTime"/>
     <result column="delete_at" property="deleteTime"/>
   </resultMap>
@@ -22,7 +26,7 @@
   </select>
 
 <!-- 通过UUID查找用户 -->
-  <select id="queryByUUID" resultType="com.twt.bookstore.poju.UserInfo">
+  <select id="queryByUUID" resultMap="UserInfoResultMap">
     select * from info_users where user_uuid = #{uuid} AND is_deleted = 0;
   </select>
 
@@ -47,7 +51,7 @@
   </select>
 
 <!-- 新增用户 -->
-  <insert id="insertUserFields" parameterType="com.twt.bookstore.poju.UserInfo" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertUserFields" useGeneratedKeys="true" keyProperty="id">
       INSERT INTO info_users
       <trim prefix="(" suffix=")" suffixOverrides=",">
           user_uuid,
@@ -71,7 +75,7 @@
   </insert>
 
   <!-- 更新用户信息 -->
-  <update id="updateUserFields" parameterType="com.twt.bookstore.poju.UserInfo">
+  <update id="updateUserFields">
       UPDATE info_users
       <set>  
           <if test="passwordEncoder != null and passwordEncoder != ''">password = #{passwordEncoder},</if>
