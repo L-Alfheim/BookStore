@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.twt.bookstore.mapper.OrderRepository">
+
+<!-- 订单主表映射表 -->
+  <resultMap id="OrderResultMap" type="com.twt.bookstore.poju.OrderDetail">
+    <id column="order_detail_id" property="id"/>
+    <result column="order_id" property="orderId"/>
+    <result column="book_id" property="bookId"/>
+    <result column="quantity" property="quantity"/>
+    <result column="price" property="price"/>
+  </resultMap>
+
+<!-- 订单明细映射表 -->
+  <resultMap id="OrderWithDetailsResultMap" type="com.twt.bookstore.poju.Order">
+    <id column="order_id" property="id"/>
+    <result column="order_id_time" property="orderIdTime"/>
+    <result column="user_id" property="userId"/>
+    <result column="total_price" property="totalPrice"/>
+    <result column="create_at" property="createTime"/>
+    
+    <collection property="orderDetails" 
+                ofType="com.twt.bookstore.poju.OrderDetail"
+                select="queryDetailsByOrderId"
+                column="order_id"
+                fetchType="lazy"> </collection>
+  </resultMap>
+
+<!-- 插入订单 -->
+  <insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO orders (
+      order_id_time, 
+      user_id, 
+      total_price, 
+      create_at
+    ) 
+    VALUES (
+      #{orderIdTime}, 
+      #{userId}, 
+      #{totalPrice}, 
+      CURRENT_TIMESTAMP
+    )
+  </insert>
+
+<!-- 通过订单号查询订单 -->
+  <select id="queryOrderByIdTime" resultMap="OrderWithDetailsResultMap">
+    SELECT 
+      order_id, 
+      order_id_time, 
+      user_id, 
+      total_price, 
+      create_at
+    FROM 
+      orders 
+    WHERE 
+      order_id_time = #{orderIdTime}
+  </select>
+
+<!-- 通过用户查询订单 -->
+  <select id="queryOrdersByUserId" resultMap="OrderResultMap">
+    SELECT 
+      order_id, 
+      order_id_time, 
+      user_id, 
+      total_price, 
+      create_at
+    FROM 
+      orders 
+    WHERE 
+      user_id = #{userId}
+    ORDER BY create_at DESC
+  </select>
+
+<!-- 通过订单主键id查找订单明细 -->
+  <select id="queryDetailsByOrderId" resultMap="OrderResultMap">
+    SELECT 
+      order_detail_id, 
+      order_id, 
+      book_id, 
+      quantity, 
+      price
+    FROM 
+      order_detail 
+    WHERE 
+      order_id = #{order_id}
+  </select>
+
+<!-- 查询订单总数量 -->
+   <select id="queryOrdersTotalCount">
+    SELECT COUNT(order_id) FROM orders
+   </select>
+
+<!-- 分页查询 -->
+   <select id="queryOrdersForPage" resultMap="OrderResultMap">
+    SELECT 
+      order_id, 
+      order_id_time, 
+      user_id, 
+      total_price, 
+      create_at
+    FROM 
+      orders
+    ORDER BY create_at DESC
+    LIMIT #{offset}, #{limit} 
+   </select>
+
+
+<!-- 插入订单明细 -->
+  <insert id="insertOrderDetails">
+    INSERT INTO order_detail (
+      order_id, 
+      book_id, 
+      quantity, 
+      price
+    ) 
+    VALUES 
+    <foreach collection="list" item="detail" separator=",">
+      (
+        #{detail.orderId}, 
+        #{detail.bookId}, 
+        #{detail.quantity}, 
+        #{detail.price}
+      )
+    </foreach>
+  </insert>
+</mapper>

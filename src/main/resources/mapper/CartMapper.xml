@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.twt.bookstore.mapper.CartRepository">
+
+  <resultMap id="CartResultMap" type="com.twt.bookstore.poju.Cart">
+    <id column="cart_id" property="id"/>
+    <result column="user_id" property="userId"/>
+    <result column="book_id" property="bookId"/>
+    <result column="item_count" property="itemCount"/>
+    <result column="is_deleted" property="isDeleted"/>
+    <result column="created_at" property="createdAt"/>
+    <result column="delete_at" property="deleteAt"/>
+  </resultMap>
+
+  <select id="queryCartItemByUserIdAndBookId" resultMap="CartResultMap">
+    SELECT 
+      cart_id, 
+      user_id, 
+      book_id, 
+      item_count,
+      is_deleted, 
+      created_at, 
+      delete_at
+    FROM 
+      carts 
+    WHERE 
+      user_id = #{userId} 
+      AND book_id = #{bookId} 
+      AND is_deleted = 0
+  </select>
+
+  <select id="queryCartsByUserId" resultMap="CartResultMap">
+    SELECT 
+      cart_id, 
+      user_id, 
+      book_id, 
+      item_count,
+      is_deleted, 
+      created_at, 
+      delete_at 
+    FROM 
+      carts 
+    WHERE 
+      user_id = #{userId} 
+      AND is_deleted = 0
+    ORDER BY created_at DESC
+  </select>
+
+  <insert id="insertCartItem" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO carts (
+      user_id, 
+      book_id, 
+      item_count,
+      created_at
+    ) 
+    VALUES (
+      #{userId}, 
+      #{bookId}, 
+      #{itemCount},
+      CURRENT_TIMESTAMP
+    )
+  </insert>
+
+  <update id="deleteCartItemById">
+    UPDATE carts
+    SET 
+      is_deleted = 1,
+      delete_at = CURRENT_TIMESTAMP
+    WHERE 
+      cart_id = #{id}
+      AND is_deleted = 0
+  </update>
+
+  <update id="deleteCartItemByUserIdAndBookId">
+    UPDATE carts
+    SET 
+      is_deleted = 1,
+      delete_at = CURRENT_TIMESTAMP
+    WHERE 
+      user_id = #{userId}
+      AND book_id = #{bookId}
+      AND is_deleted = 0
+  </update>
+</mapper>
