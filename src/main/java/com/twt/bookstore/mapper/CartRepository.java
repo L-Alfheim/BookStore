@@ -1,8 +1,9 @@
 package com.twt.bookstore.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
-import com.twt.bookstore.exception.SqlException;
+
 import com.twt.bookstore.poju.Cart;
 
 public interface CartRepository {
@@ -12,40 +13,35 @@ public interface CartRepository {
      * @param userId 所属用户id
      * @param bookId 书籍id
      * @return 匹配的购物车记录 {@link Cart} 对象，如果不存在或已删除则返回 {@code null}
-     * @throws SqlException 202
      */
-    Cart queryCartItemByUserIdAndBookId(@Param("userId") Long userId, @Param("bookId") Long bookId) throws SqlException;
+    Cart queryCartItemByUserIdAndBookId(@Param("userId") Long userId, @Param("bookId") Long bookId);
 
     /**
      * 查询购物车
      * @param userId 所属用户id
      * @return 该用户所有未删除的购物车记录 {@link Cart} 对象列表，如果没有则返回空列表
-     * @throws SqlException 202
      */
-    List<Cart> queryCartsByUserId(Long userId) throws SqlException;
+    List<Cart> queryCartsByUserId(Long userId);
 
     /**
      * 添加商品
      * @param cart Cart对象
      * @return int 影响的行数
-     * @throws SqlException 202
      */
-    int insertCartItem(Cart cart) throws SqlException;
+    int insertCartItem(Cart cart);
 
     /**
      * 软删除购物车
      * @param id 购物车记录的主键ID
      * @return int 影响的行数
-     * @throws SqlException 202
      */
-    int deleteCartItemById(Long id) throws SqlException;
+    int deleteCartItemById(Long id);
     
     /**
      * 软删除商品
      * @param userId 所属用户id
      * @param bookId 书籍id
      * @return int 受影响的行数
-     * @throws SqlException 202
      */
-    int deleteCartItemByUserIdAndBookId(Long userId, Long bookId) throws SqlException;
+    int deleteCartItemByUserIdAndBookId(Long userId, Long bookId);
 }

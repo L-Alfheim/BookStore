@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import com.twt.bookstore.exception.SqlException;
@@ -21,16 +20,10 @@ public class UserRepositoryImpl implements UserRepository {
      * 按照uuid 查找主键id
      * @param uuid
      * @return result UserInfo 若不存在返回null
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public Long queryIdByUUID(UUID uuid) throws SqlException {
-        try {
-            return sqlSessionTemplate.selectOne("queryIdByUUID", uuid);
-        } catch(Exception e) {
-            //查询出现错误
-            throw new SqlException(202, "errors occurs when queryIdByUUID", e);
-        }
+    public Long queryIdByUUID(UUID uuid) {
+        return sqlSessionTemplate.selectOne("queryIdByUUID", uuid);
     }
 
     /**
@@ -40,67 +33,37 @@ public class UserRepositoryImpl implements UserRepository {
      * @throws SqlException 202 数据库错误
      */
     @Override
-    public UserInfo queryByUUID(UUID uuid) throws SqlException {
-        try {
-            return sqlSessionTemplate.selectOne("queryByUUID", uuid);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryByUUID", e);
-        }
+    public UserInfo queryByUUID(UUID uuid) {
+        return sqlSessionTemplate.selectOne("queryByUUID", uuid);
     }
     
     /**
      * 按照用户名查找用户
      * @param name 用户名
      * @return UserInfo
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public UserInfo queryByUsername(String name) throws SqlException {
-        try{
-            return sqlSessionTemplate.selectOne("queryByUsername", name);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryByUsername", e);
-        }
+    public UserInfo queryByUsername(String name) {
+        return sqlSessionTemplate.selectOne("queryByUsername", name);
     }
     
     /**
      * 添加人员信息
      * @param userInfo UserInfo 人员信息对象
      * @return int 受影响的行数
-     * @throws SqlException 101 需要判断是否是由于手机，邮箱重复造成异常
-     *                      202 数据库错误
      */
     @Override
-    public int insertUserFields(UserInfo userInfo) throws SqlException {
-        
-        try {
-            return sqlSessionTemplate.insert("insertUserFields", userInfo);
-        } catch(DuplicateKeyException e) {
-            //数据字段重复
-            throw new SqlException(101, "Field value duplication", e);
-        } catch (Exception e) {
-            //其他数据库异常
-            throw new SqlException(202, "errors occurs when insertUserFields", e);
-        }
+    public int insertUserFields(UserInfo userInfo) {
+        return sqlSessionTemplate.insert("insertUserFields", userInfo);
     }
 
     /**
      * 更新人员信息
      * @param userInfo
      * @return int 受影响的行数
-     * @throws SqlException 101 需要判断是否是由于手机，邮箱重复造成异常
-     *                      202 数据库错误
      */
     @Override
-    public int updateUserFields(UserInfo userInfo) throws SqlException {
-        try {
-            return sqlSessionTemplate.update("updateUserFields", userInfo);
-        } catch(DuplicateKeyException e) {
-            //数据字段重复
-            throw new SqlException(101, "Field value duplication", e);
-        } catch (Exception e) {
-            //其他数据库错误
-            throw new SqlException(101, "errors occurs when updateUserFields", e);
-        }
+    public int updateUserFields(UserInfo userInfo) {
+        return sqlSessionTemplate.update("updateUserFields", userInfo);
     }
 }

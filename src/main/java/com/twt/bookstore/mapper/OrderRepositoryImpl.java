@@ -8,7 +8,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.twt.bookstore.exception.SqlException;
 import com.twt.bookstore.poju.Order;
 import com.twt.bookstore.poju.OrderDetail;
 
@@ -31,46 +30,30 @@ public class OrderRepositoryImpl implements OrderRepository {
      * 插入新的订单主记录
      * @param order 订单实体对象
      * @return int 受影响的行数，通常为 1
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public int insertOrder(Order order) throws SqlException {
-        try {
-            // 使用 insert 方法
-            return sqlSessionTemplate.insert(NAMESPACE + "insertOrder", order);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when insertOrder", e);
-        }
+    public int insertOrder(Order order) {
+        return sqlSessionTemplate.insert(NAMESPACE + "insertOrder", order);
     }
 
     /**
      * 根据订单号查询订单明细
      * @param orderId 订单主键ID
      * @return 包含明细列表的 {@link Order} 对象
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public Order queryOrderByIdTime(String orderIdTime) throws SqlException {
-        try {
-            return sqlSessionTemplate.selectOne(NAMESPACE + "queryOrderByIdTime", orderIdTime);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryOrderByIdTime, IdTime: " + orderIdTime, e);
-        }
+    public Order queryOrderByIdTime(String orderIdTime) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryOrderByIdTime", orderIdTime);
     }
 
     /**
      * 根据用户ID查询该用户的所有订单记录。
      * @param userId 所属用户的主键ID
      * @return List<Order> 订单列表，没有则返回null
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public List<Order> queryOrdersByUserId(Long userId) throws SqlException {
-        try {
-            return sqlSessionTemplate.selectOne(NAMESPACE + "queryOrdersByUserId", userId);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryOrdersByUserId, userId: " + userId, e);
-        }
+    public List<Order> queryOrdersByUserId(Long userId) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryOrdersByUserId", userId);
     }
 
     /**
@@ -78,47 +61,32 @@ public class OrderRepositoryImpl implements OrderRepository {
      * @param offset 偏移数量
      * @param limit 页面大小
      * @return List<Order> 订单列表，如果没有则返回空列表
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public List<Order> queryOrdersWithDetailsForPage(int offset, int limit) throws SqlException {
-        try {
-            Map<String, Object> params = new HashMap<>();
-            params.put("offset", offset);
-            params.put("limit", limit);
-            return sqlSessionTemplate.selectList(NAMESPACE + "queryOrdersForPage", params);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryOrdersWithDetailsForPage", e);
-        }
+    public List<Order> queryOrdersWithDetailsForPage(int offset, int limit) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", offset);
+        params.put("limit", limit);
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryOrdersForPage", params);
     }
 
     /**
      * 查询订单总数
      * @param userId 所属用户的主键id
      * @return 订单总数
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public Long countOrders(Long userId) throws SqlException {
-        try {
-            return sqlSessionTemplate.selectOne(NAMESPACE + "countOrders", userId);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when countOrders", e);
-        }
+    public Long countOrders(Long userId) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "countOrders", userId);
     }
 
     /**
      * 插入订单明细记录
      * @param details List<OrderDetail> 订单明细列表
      * @return int 受影响的行数
-     * @throws SqlException 202 数据库错误
      */
     @Override
-    public int insertOrderDetails(List<OrderDetail> details) throws SqlException {
-        try {
-            return sqlSessionTemplate.insert(NAMESPACE + "insertOrderDetails", details);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when insertOrderDetails", e);
-        }
+    public int insertOrderDetails(List<OrderDetail> details) {
+        return sqlSessionTemplate.insert(NAMESPACE + "insertOrderDetails", details);
     }
 }

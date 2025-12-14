@@ -31,34 +31,23 @@ public class CartRepositoryImpl implements CartRepository {
      * @param userId 所属用户id
      * @param bookId 书籍id
      * @return 购物车单条记录 {@link Cart} 对象，不存在则返回 {@code null}
-     * @throws SqlException 202 需要手动回滚
      */
     @Override
-    public Cart queryCartItemByUserIdAndBookId(Long userId, Long bookId) throws SqlException{
-        try {
-            Map<String, Object> params = new HashMap<>();
-            params.put("userId", userId);
-            params.put("bookId", bookId);
-            return sqlSessionTemplate.selectOne(NAMESPACE + "queryCartItemByUserIdAndBookId", params);
-        } catch (Exception e) {
-            //查询出现错误
-            throw new SqlException(202, "errors occurs when queryCartItemByUserIdAndBookId, userId: " + userId + "bookId: " + bookId, e);
-        }
+    public Cart queryCartItemByUserIdAndBookId(Long userId, Long bookId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("bookId", bookId);
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryCartItemByUserIdAndBookId", params);
     }
 
     /**
      * 查询购物车
      * @param userId 所属用户id
      * @return 该用户所有未删除的购物车记录 {@link Cart} 对象列表，如果没有则返回空列表
-     * @throws SqlException 202 需要手动回滚
      */
     @Override
-    public List<Cart> queryCartsByUserId(Long userId) throws SqlException{
-        try {
-            return sqlSessionTemplate.selectList(NAMESPACE + "queryCartsByUserId", userId);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when queryCartsByUserId, userId: " + userId, e);
-        }
+    public List<Cart> queryCartsByUserId(Long userId){
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryCartsByUserId", userId);
 
     }
 
@@ -66,15 +55,10 @@ public class CartRepositoryImpl implements CartRepository {
      * 添加商品
      * @param cart Cart对象
      * @return int 影响的行数
-     * @throws SqlException 202 需要手动回滚
      */
     @Override
-    public int insertCartItem(Cart cart) throws SqlException{
-        try {
-            return sqlSessionTemplate.update(NAMESPACE + "insertCartItem", cart);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when insertCartItem", e);
-        }
+    public int insertCartItem(Cart cart){
+        return sqlSessionTemplate.update(NAMESPACE + "insertCartItem", cart);
 
     }
 
@@ -82,15 +66,10 @@ public class CartRepositoryImpl implements CartRepository {
      * 软删除购物车
      * @param id 购物车记录的主键ID
      * @return int 影响的行数
-     * @throws SqlException 202 需要手动回滚
      */
     @Override
-    public int deleteCartItemById(Long id) throws SqlException {
-        try{
-            return sqlSessionTemplate.delete(NAMESPACE + "deleteCartItemById", id);
-        } catch(Exception e) {
-            throw new SqlException(202, "errors occurs when deleteCartItemById, id: " + id, e);
-        }
+    public int deleteCartItemById(Long id) {
+        return sqlSessionTemplate.delete(NAMESPACE + "deleteCartItemById", id);
 
     }
     
@@ -102,15 +81,10 @@ public class CartRepositoryImpl implements CartRepository {
      * @throws SqlException 202 需要手动回滚
      */
     @Override
-    public int deleteCartItemByUserIdAndBookId(Long userId, Long bookId) throws SqlException {
-        try{
-            Map<String, Object> params = new HashMap<>();
-            params.put("user_id", userId);
-            params.put("book_id", bookId);
-            return sqlSessionTemplate.update(NAMESPACE + "deleteCartItemByUserIdAndBookId", params);
-        } catch (Exception e) {
-            throw new SqlException(202, "errors occurs when deleteCartItemByUserIdAndBookId", e);
-        }
-
+    public int deleteCartItemByUserIdAndBookId(Long userId, Long bookId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("book_id", bookId);
+        return sqlSessionTemplate.update(NAMESPACE + "deleteCartItemByUserIdAndBookId", params);
     }
 }
