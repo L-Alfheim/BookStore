@@ -41,8 +41,7 @@ public class AuthController {
     public BaseResponse<UserResponse> register(@Valid @RequestBody UserRegister request)
             throws BusinessException, SqlException {
         
-        UserResponse response = authService.register(request);
-        return BaseResponse.success(response);
+        return authService.register(request);
     }
 
     /**
@@ -60,7 +59,6 @@ public class AuthController {
     public BaseResponse<UserResponse> login(@Valid @RequestBody UserLogin request)
             throws BusinessException, SqlException {
 
-        UserResponse response = authService.login(request.username(), request.password());
-        return BaseResponse.success(response);
+        return authService.login(request);
     }
 }
