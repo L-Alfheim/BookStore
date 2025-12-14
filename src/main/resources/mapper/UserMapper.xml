@@ -83,7 +83,7 @@
           <if test="phone != null and phone != ''">phone = #{phone},</if>
           <if test="role != null">role = #{role, typeHandler=org.apache.ibatis.type.EnumTypeHandler},</if>
           <if test="is_deleted != null">is_deleted = #{is_deleted},</if>
-          updated_at = NOW(), 
+          updated_at = UTC_TIMESTAMP(), 
       </set>
       WHERE user_id = #{id}
   </update>

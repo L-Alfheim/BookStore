@@ -60,7 +60,7 @@
       #{userId}, 
       #{bookId}, 
       #{itemCount},
-      CURRENT_TIMESTAMP
+      UTC_TIMESTAMP(6)
     )
   </insert>
 
@@ -68,7 +68,7 @@
     UPDATE carts
     SET 
       is_deleted = 1,
-      delete_at = CURRENT_TIMESTAMP
+      delete_at = UTC_TIMESTAMP(6)
     WHERE 
       cart_id = #{id}
       AND is_deleted = 0
@@ -78,7 +78,7 @@
     UPDATE carts
     SET 
       is_deleted = 1,
-      delete_at = CURRENT_TIMESTAMP
+      delete_at = UTC_TIMESTAMP(6)
     WHERE 
       user_id = #{userId}
       AND book_id = #{bookId}

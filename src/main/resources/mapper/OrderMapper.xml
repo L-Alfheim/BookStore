@@ -41,7 +41,7 @@
       #{orderIdTime}, 
       #{userId}, 
       #{totalPrice}, 
-      CURRENT_TIMESTAMP
+      UTC_TIMESTAMP(6)
     )
   </insert>
 

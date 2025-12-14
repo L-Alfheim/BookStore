@@ -27,21 +27,21 @@
      AND is_deleted = 0;
   </select>
 
-  <!-- 按照书籍名称模糊查找 -->
-  <select id="queryByName" resultMap="BookInfoResultMap">
-    select * from info_books 
-    where
-     title LIKE CONCAT('%', #{title}, '%')
-     AND is_deleted = 0;
-  </select>
-
-  <!-- 按照书籍作者模糊查找 -->
-  <select id="queryByAuthor" resultMap="BookInfoResultMap">
-    select * from info_books 
-    where
-    author LIKE CONCAT('%', #{author}, '%')
-    AND is_deleted = 0
-    ORDER BY book_id;
+  <!-- 按照作者，名称模糊查找 -->
+<select id="queryByTitleOrAuthorAndPaged" resultMap="BookInfoResultMap">
+  SELECT 
+    * FROM 
+    info_books 
+  WHERE
+    is_deleted = 0
+    <if test="title != null and title != ''">
+      AND title LIKE CONCAT('%', #{title}, '%')
+    </if>
+    <if test="author != null and author != ''">
+      AND author LIKE CONCAT('%', #{author}, '%')
+    </if>
+  ORDER BY 
+    create_at DESC
   </select>
 
   <!-- 按照UUID唯一确定书籍 -->
@@ -63,7 +63,6 @@
   <update id="updateBookFields" parameterType="com.twt.bookstore.poju.BookInfo">
       UPDATE info_books
       <set>
-          <!-- 管理员修改信息等场景 -->
           <if test="title != null">title = #{title},</if>
           <if test="author != null">author = #{author},</if>
           <if test="price != null">price = #{price},</if>
@@ -72,9 +71,9 @@
           <if test="isAvailable != null">is_available = #{isAvailable},</if>
           <if test="isDeleted != null and isDeleted == true">
               is_deleted = 1,
-              delete_at = CURRENT_TIMESTAMP
+              delete_at = UTC_TIMESTAMP(6)
           </if>
-          updated_at = CURRENT_TIMESTAMP,
+          updated_at = UTC_TIMESTAMP(6),
       </set>
       WHERE book_id = #{id}
       AND is_deleted = 0
