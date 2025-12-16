@@ -42,6 +42,12 @@ public class BookService {
         try {
             BookInfo resutBookInfo = bookRepository.queryByUUID(uuid);
 
+            
+            //结果不存在，直接返回
+            if (resutBookInfo == null) {
+                return BaseResponse.error(404, "Book: " + uuid.toString() + " is not found");
+            }
+            
             BookDTO resultDTO = new BookDTO(resutBookInfo.getUuid(), 
                                             resutBookInfo.getTitle(), 
                                             resutBookInfo.getAuthor(), 
