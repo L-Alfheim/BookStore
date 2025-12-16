@@ -42,9 +42,11 @@ public class SecurityConfig {
                 // 允许所有人访问 /api/books/** 路径下的所有请求 (公开查询/列表)
                 .requestMatchers("/api/books/**").permitAll() 
                 
-                // 要求 /api/admin/books/** 路径下的请求必须具有 ADMIN 角色
-                // Spring Security 的 hasRole("ADMIN") 会自动检查权限列表中是否存在 "ROLE_ADMIN"。
+                //书籍管理要求admin角色
                 .requestMatchers("/api/admin/books/**").hasRole("admin")
+
+                //购物车要求用户角色
+                .requestMatchers("/api/cart/**").hasRole("user")
 
                 // 任何其他请求（如 /admin/users）仍然需要认证
                 .anyRequest().authenticated() 

@@ -1,5 +1,6 @@
 package com.twt.bookstore.mapper;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,5 +91,26 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public int insertBookFields(BookInfo book) {
         return sqlSessionTemplate.insert(NAMESPACE + "insertBookFields", book);
+    }
+
+    /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * @param bookIds  bookId
+     * @return 对应的 BookInfo 列表
+     */
+    @Override
+    public List<BookInfo> queryBookInfoByIds(Collection<Long> bookIds) {
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryBookInfoByIds", bookIds);
+    }
+
+    /**
+     * 根据UUID查找主键id
+     * 包含已删除书籍，专用于购物车映射
+     * @param uuid UUID
+     * @return Long 主键id
+     */
+    @Override
+    public Long queryIdByUuidContainDelete(UUID uuid) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryIdByUuidContainDelete", uuid);
     }
 }

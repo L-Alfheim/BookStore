@@ -44,4 +44,13 @@ public interface CartRepository {
      * @return int 受影响的行数
      */
     int deleteCartItemByUserIdAndBookId(Long userId, Long bookId);
+
+    /**
+     * 更新购物车商品数量
+     * 当购物车已有相同商品时应该使用该方法
+     * @param id cart_id
+     * @param itemCount 数量
+     * @return 影响行数
+     */
+    int updateCartItemCountById(Long id, Integer itemCount);
 }

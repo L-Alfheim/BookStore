@@ -205,7 +205,6 @@ public class BookService {
      * 将单个 BookInfo 实体转换为 BookDTO 数据传输对象。
      * @param bookInfo 原始的 BookInfo 实体对象。
      * @return 转换后的 BookDTO 对象。
-     * @author Deepseek
      */
     private BookDTO convertToDto(BookInfo bookInfo) {
         if (bookInfo == null) {
@@ -231,16 +230,13 @@ public class BookService {
      */
     private List<BookDTO> convertToDtoList(List<BookInfo> bookInfoList) {
         if (bookInfoList == null || bookInfoList.isEmpty()) {
-            // 返回一个不可变的空列表
+            // 返回空列表
             return List.of();
         }
 
         return bookInfoList.stream()
-            // 1. 映射：对列表中的每一个 BookInfo 执行 convertToDto 方法
             .map(this::convertToDto) 
-            // 2. 过滤：如果 convertToDto 返回 null（例如 BookInfo 为 null），则跳过该元素
             .filter(dto -> dto != null) 
-            // 3. 收集：将所有转换后的 DTO 收集到一个新的 List 中
             .collect(Collectors.toList());
     }
 }

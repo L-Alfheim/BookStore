@@ -1,5 +1,6 @@
 package com.twt.bookstore.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,4 +52,21 @@ public interface BookRepository {
      * @return int 影响的行数
      */
     public int insertBookFields(BookInfo book);
+
+    /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * 用于购物车查询映射
+     * @param bookIds  bookId
+     * @return 对应的 BookInfo 列表
+     */
+    List<BookInfo> queryBookInfoByIds(Collection<Long> bookIds);
+
+    /**
+     * 根据UUID查找主键id
+     * 包含已删除书籍，专用于购物车映射
+     * @param uuid UUID
+     * @return Long 主键id
+     */
+    Long queryIdByUuidContainDelete(UUID uuid);
 }
+

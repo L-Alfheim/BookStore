@@ -87,4 +87,20 @@ public class CartRepositoryImpl implements CartRepository {
         params.put("book_id", bookId);
         return sqlSessionTemplate.update(NAMESPACE + "deleteCartItemByUserIdAndBookId", params);
     }
+
+    /**
+     * 更新购物车商品数量
+     * 当购物车已有相同商品时应该使用该方法
+     * @param id cart_id
+     * @param itemCount 数量
+     * @return 影响行数
+     */
+    @Override
+    public int updateCartItemCountById(Long id, Integer itemCount) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        params.put("itemCount", itemCount); 
+
+        return sqlSessionTemplate.update(NAMESPACE + "updateCartItemCountById", params);
+    }
 }

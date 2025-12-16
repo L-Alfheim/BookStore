@@ -96,7 +96,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 // 6. 构建 Authentication 对象 (已验证的 Token，无需凭证)
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userContext.userName(), // Principal: 用户名 (作为身份标识)
+                        userContext, // 用户身份
                         null,                   // Credentials: 密码/凭证 (Token 已验证，此处为 null)
                         // 使用确保带有 ROLE_ 前缀的权限名称
                         Collections.singletonList(new SimpleGrantedAuthority(authorityName)) // Authorities

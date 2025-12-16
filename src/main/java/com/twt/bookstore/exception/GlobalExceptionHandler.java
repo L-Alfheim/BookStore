@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
-            return BaseResponse.error(404, "please contact admin");
+            return BaseResponse.error(500, "please contact admin");
         }
     }
 
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
-            return BaseResponse.error(404, "please contact admin");
+            return BaseResponse.error(500, "please contact admin");
         }
     }
 
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
-            return BaseResponse.error(404, "please contact admin");
+            return BaseResponse.error(500, "please contact admin");
         }
     }
     
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
-            return BaseResponse.error(404, "please contact admin");
+            return BaseResponse.error(500, "please contact admin");
         }
     }
 
