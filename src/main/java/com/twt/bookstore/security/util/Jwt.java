@@ -88,7 +88,7 @@ public class Jwt {
             Map<String, Object> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
             //转化hashmap为UserContext
-            UserContext userContext = UserContext.fromString(claims.get("userName").toString(), 
+            UserContext userContext = UserContext.fromString(claims.get("username").toString(), 
                                                              claims.get("uuid").toString(), 
                                                              claims.get("role").toString());
 
