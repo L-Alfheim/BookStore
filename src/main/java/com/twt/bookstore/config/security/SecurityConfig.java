@@ -20,8 +20,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    //403处理器
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    //401处理器
     private final CustomAuthenticationHandler customAuthenticationHandler;
+
+    //JWT前置过滤器
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean

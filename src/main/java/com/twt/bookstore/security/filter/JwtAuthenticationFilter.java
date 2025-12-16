@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +13,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twt.bookstore.dto.response.BaseResponse;
 import com.twt.bookstore.dto.userContext.UserContext;
 import com.twt.bookstore.exception.JwtSecurityException;
 import com.twt.bookstore.security.util.Jwt;
@@ -108,7 +111,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JwtSecurityException e) {
             // 9. 处理 Token 验证失败 (如过期、签名错误)
             // SecurityContextHolder.clearContext();
-            throw new BadCredentialsException("JWT verification failed, please login again", e);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            BaseResponse<Void> result = BaseResponse.error(401, "JWT expired or invalid, please login again");
+
+            response.getWriter().write(
+                    new ObjectMapper().writeValueAsString(result)
+            );
+
+            return;
         }
 
         // 10. 放行请求，继续执行过滤器链
