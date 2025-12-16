@@ -16,7 +16,7 @@
             javaType="com.twt.bookstore.poju.UserRole" />
     <result column="is_deleted" property="isDeleted"/>
     <result column="create_at" property="createTime"/>
-    <result column="updated_at" property="updateTime"/>
+    <result column="update_at" property="updateTime"/>
     <result column="delete_at" property="deleteTime"/>
   </resultMap>
 
@@ -42,7 +42,7 @@
         role, 
         is_deleted, 
         create_at, 
-        updated_at, 
+        update_at, 
         delete_at 
     FROM 
         info_users 

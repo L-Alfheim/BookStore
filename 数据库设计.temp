@@ -31,9 +31,9 @@ CREATE TABLE info_users (
     phone VARCHAR(20) UNIQUE COMMENT '手机号',
     role ENUM('user', 'admin') DEFAULT 'user' COMMENT '角色',
     is_deleted TINYINT(1) DEFAULT 0 COMMENT '注销状态',
-    create_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    delete_at DATETIME DEFAULT NULL COMMENT '注销时间'
+    create_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    update_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    delete_at TIMESTAMP(6) DEFAULT NULL COMMENT '注销时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '用户表';
 
 可能的exception：用户名重复，手机号重复,邮箱重复，UUID重复
@@ -62,8 +62,9 @@ CREATE TABLE info_books (
     stock_quantity INT DEFAULT 0 COMMENT '库存',
     is_available TINYINT(1) DEFAULT 1 COMMENT '是否在售',
     is_deleted TINYINT(1) DEFAULT 0 COMMENT '删除状态',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '上架时间',
-    delete_at DATETIME DEFAULT NULL COMMENT '删除时间'
+    create_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '上架时间',
+    update_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    delete_at TIMESTAMP(6) DEFAULT NULL COMMENT '删除时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '书籍表';
 
 
@@ -72,6 +73,7 @@ CREATE TABLE info_books (
 id 自增主键
 user_id 外键所属用户
 book_id 外键商品
+count 数量
 is_deleted 删除状态
 create_at 加入时间
 delete_at 删除时间
@@ -82,8 +84,8 @@ CREATE TABLE carts (
     book_id BIGINT NOT NULL COMMENT '商品id',
     count INT DEFAULT 1 COMMENT '数量',
     is_deleted TINYINT(1) DEFAULT 0 COMMENT '删除状态',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
-    delete_at DATETIME DEFAULT NULL COMMENT '删除时间',
+    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '加入时间',
+    delete_at TIMESTAMP(6) DEFAULT NULL COMMENT '删除时间',
     FOREIGN KEY (user_id) REFERENCES info_users (user_id),
     FOREIGN KEY (book_id) REFERENCES info_books (book_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '购物车';
@@ -105,7 +107,7 @@ CREATE TABLE orders(
     order_id_time VARCHAR(32) NOT NULL UNIQUE COMMENT '订单号',
     user_id BIGINT NOT NULL COMMENT '下单用户',
     total_price DECIMAL(10, 2) NOT NULL COMMENT '订单价格',
-    create_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
+    create_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '下单时间',
     FOREIGN KEY (user_id) REFERENCES info_users (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT = '订单主表';
 

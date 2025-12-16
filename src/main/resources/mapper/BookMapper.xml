@@ -15,7 +15,7 @@
     <result column="is_available" property="isAvailable"/>
     <result column="is_deleted" property="isDeleted"/>
     <result column="create_at" property="createTime"/>
-    <result column="updated_at" property="updateTime"/>
+    <result column="update_at" property="updateTime"/>
     <result column="delete_at" property="deleteTime"/>
   </resultMap>
 
@@ -71,9 +71,9 @@
           <if test="isAvailable != null">is_available = #{isAvailable},</if>
           <if test="isDeleted != null and isDeleted == true">
               is_deleted = 1,
-              delete_at = UTC_TIMESTAMP(6)
+              delete_at = UTC_TIMESTAMP(6),
           </if>
-          updated_at = UTC_TIMESTAMP(6),
+          update_at = UTC_TIMESTAMP(6),
       </set>
       WHERE book_id = #{id}
       AND is_deleted = 0
