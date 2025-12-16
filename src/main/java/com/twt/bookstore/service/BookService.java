@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.twt.bookstore.dto.request.BookCreateDTO;
 import com.twt.bookstore.dto.request.BookQueryDTO;
 import com.twt.bookstore.dto.request.BookUpdateDTO;
@@ -70,6 +71,7 @@ public class BookService {
     @Transactional(rollbackFor = ServiceException.class)
     public BaseResponse<List<BookDTO>> getBooks(BookQueryDTO queryDTO) throws ServiceException {
         try {
+            PageHelper.startPage(queryDTO.page(), queryDTO.size());
             List<BookInfo> result = bookRepository.queryByTitleOrAuthorAndPaged(queryDTO.title(),queryDTO.author());
             if(result == null) {
                 return BaseResponse.success("No result", null);
