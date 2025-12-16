@@ -1,8 +1,8 @@
 package com.twt.bookstore.exception;
 
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.twt.bookstore.dto.response.BaseResponse;
@@ -11,9 +11,11 @@ import com.twt.bookstore.dto.response.BaseResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<Void> handle(BusinessException e) {
+        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -22,8 +24,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(SqlException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // HTTP 404
     public BaseResponse<Void> handle(SqlException e) {
+        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -32,8 +34,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JwtSecurityException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<Void> handle(JwtSecurityException e) {
+        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -42,8 +44,8 @@ public class GlobalExceptionHandler {
     }
     
     @ExceptionHandler(ServiceException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<Void> handle(ServiceException e) {
+        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -52,8 +54,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse<Void> handleOther(Exception e) {
+        log.warn("ServiceException caught: happen at {}, Message= {}", e.getClass(), e.getMessage() + e.getCause().getMessage());
         return BaseResponse.error(500, "Internal server error");
     }
 }
