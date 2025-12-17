@@ -2,8 +2,6 @@ package com.twt.bookstore.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.twt.bookstore.poju.Order;
 import com.twt.bookstore.poju.OrderDetail;
 

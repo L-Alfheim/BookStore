@@ -19,7 +19,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public BaseResponse<Void> handle(BusinessException e) {
-        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
+        String detailMessage = (e.getCause() != null) ? e.getCause().getMessage() : "No underlying cause";
+        log.warn("ServiceException caught: ErrorCode={}, Class={}, Message={}, Detail={}", 
+                 e.getErrorCode(), e.getClass().getSimpleName(), e.getMessage(), detailMessage);
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -29,7 +31,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SqlException.class)
     public BaseResponse<Void> handle(SqlException e) {
-        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
+        String detailMessage = (e.getCause() != null) ? e.getCause().getMessage() : "No underlying cause";
+        log.warn("ServiceException caught: ErrorCode={}, Class={}, Message={}, Detail={}", 
+                 e.getErrorCode(), e.getClass().getSimpleName(), e.getMessage(), detailMessage);
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -39,7 +43,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtSecurityException.class)
     public BaseResponse<Void> handle(JwtSecurityException e) {
-        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
+        String detailMessage = (e.getCause() != null) ? e.getCause().getMessage() : "No underlying cause";
+        log.warn("ServiceException caught: ErrorCode={}, Class={}, Message={}, Detail={}", 
+                 e.getErrorCode(), e.getClass().getSimpleName(), e.getMessage(), detailMessage);
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {
@@ -49,7 +55,9 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(ServiceException.class)
     public BaseResponse<Void> handle(ServiceException e) {
-        log.warn("ServiceException caught: ErrorCode={}, happen at {}, Message= {}", e.getErrorCode(),e.getClass() , e.getMessage() + e.getCause().getMessage());
+        String detailMessage = (e.getCause() != null) ? e.getCause().getMessage() : "No underlying cause";
+        log.warn("ServiceException caught: ErrorCode={}, Class={}, Message={}, Detail={}", 
+                 e.getErrorCode(), e.getClass().getSimpleName(), e.getMessage(), detailMessage);
         if(e.getErrorCode() == 101) {
             return BaseResponse.error(404, e.getMessage());
         }else {

@@ -183,7 +183,7 @@ public class BookService {
         try {
             Long id = bookRepository.queryIdByUUID(uuid);
             if(id == null) {
-                return BaseResponse.error(202, "Book: " + uuid + " is not found");
+                return BaseResponse.error(404, "Book: " + uuid + " is not found");
             }
             BookInfo book = new BookInfo();
             book.setId(id);
