@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.twt.bookstore.dto.request.CartAddDTO;
 import com.twt.bookstore.dto.response.BaseResponse;
@@ -40,6 +41,7 @@ public class CartService {
      * @return BaseResponse<List<CartDTO>>
      * @throws ServiceException 204
      */
+    @Transactional(rollbackFor = Exception.class)
     public BaseResponse<List<CartDTO>> queryCart(@AuthenticationPrincipal UserContext userContext) throws ServiceException {
         try {
             //查询用户id
@@ -102,6 +104,7 @@ public class CartService {
      * @return BaseResponse<Void>
      * @throws ServiceException 204
      */
+    @Transactional(rollbackFor = Exception.class)
     public BaseResponse<Void> addOneItem(UserContext userContext, CartAddDTO addRequest) throws ServiceException {
         try {
 
@@ -144,6 +147,7 @@ public class CartService {
      * @return BaseResponse<Void>
      * @throws ServiceException 204
      */
+    @Transactional(rollbackFor = Exception.class)
     public BaseResponse<Void> deleteOneItem (UUID bookUuid, UserContext userContext) throws ServiceException{
         try {
             //查找人员主键id
@@ -168,6 +172,7 @@ public class CartService {
      * @return BaseResponse<Void>
      * @throws ServiceException 204
      */
+    @Transactional(rollbackFor = Exception.class)
     public BaseResponse<Void> deleteAllItem(UserContext userContext) throws ServiceException {
         try{
             //查找人员主键id

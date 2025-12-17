@@ -84,7 +84,7 @@ CREATE TABLE carts (
     book_id BIGINT NOT NULL COMMENT '商品id',
     count INT DEFAULT 1 COMMENT '数量',
     is_deleted TINYINT(1) DEFAULT 0 COMMENT '删除状态',
-    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '加入时间',
+    create_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '加入时间',
     delete_at TIMESTAMP(6) DEFAULT NULL COMMENT '删除时间',
     FOREIGN KEY (user_id) REFERENCES info_users (user_id),
     FOREIGN KEY (book_id) REFERENCES info_books (book_id)
