@@ -43,6 +43,7 @@ public interface BookRepository {
      * @param bookId 书籍ID
      * @param changeQuantity 变动数量 (正数为增加库存，负数为减少库存)
      * @return 影响的行数
+     * @deprecated  不安全 使用{@link #decreaseStock(Long, Integer)}
      */
     int updateStockQuantity(Long bookId, Integer changeQuantity);
 
@@ -56,7 +57,7 @@ public interface BookRepository {
     /**
      * 根据一组 bookId 批量查询 BookInfo
      * 用于购物车查询映射
-     * @param bookIds  bookId
+     * @param bookIds  bookId Collection<Long>
      * @return 对应的 BookInfo 列表
      */
     List<BookInfo> queryBookInfoByIds(Collection<Long> bookIds);
@@ -68,5 +69,40 @@ public interface BookRepository {
      * @return Long 主键id
      */
     Long queryIdByUuidContainDelete(UUID uuid);
+
+    /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * 过滤删除的和不在售的书籍
+     * 用于下单验证
+     *
+     * @param bookIds 书籍主键id List
+     * @return List<BookInfo>
+     * @apiNote 下单验证使用这个方法
+     */
+    List<BookInfo> selectAvailableBooksByIds(List<Long> bookIds);
+
+        /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * 包括删除的和不在售的书籍
+     * 用于下单验证
+     *
+     * @param bookIds 书籍主键id List
+     * @return List<BookInfo>
+     * @apiNote 订单查询使用这个方法
+     */
+    List<BookInfo> queryBookInfoByIdsContainDelete(List<Long> bookIds);
+
+    /**
+     * 下单扣除商品库存
+     * 采用数据库层面的乐观锁
+     *
+     * @param bookId 书籍 ID
+     * @param quantity 扣除数量
+     * @return 受影响的行数
+     * @apiNote 如果影响行数为0，则扣除失败，需要取消订单生成
+     */
+    int decreaseStock(Long bookId, Integer quantity);
+
+    UUID queryUuidById(Long bookId);
 }
 

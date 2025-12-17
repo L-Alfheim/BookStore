@@ -45,8 +45,14 @@ public class SecurityConfig {
                 //书籍管理要求admin角色
                 .requestMatchers("/api/admin/books/**").hasRole("admin")
 
-                //购物车要求用户角色
+                //购物车要求user角色
                 .requestMatchers("/api/cart/**").hasRole("user")
+
+                //用户订单要求user角色
+                .requestMatchers("/api/orders/**").hasRole("user")
+
+                //管理员订单要求admin角色
+                .requestMatchers("api/admin/orders/**").hasRole("admin")
 
                 // 任何其他请求（如 /admin/users）仍然需要认证
                 .anyRequest().authenticated() 

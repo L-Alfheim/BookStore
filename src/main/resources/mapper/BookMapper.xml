@@ -115,7 +115,7 @@
       </trim>
   </insert>
 
-  <!-- 主键id批量查询 -->
+  <!-- 主键id批量查询不包括已删除 -->
   <select id="queryBookInfoByIds" resultMap="BookInfoResultMap">
     SELECT 
         book_id, book_uuid, title, author, price, description, stock_quantity, is_available
@@ -129,10 +129,56 @@
     AND is_deleted = 0
   </select>
 
+  <!-- 主键id批量查询包括已删除 -->
+  <select id="queryBookInfoByIdsContainDelete" resultMap="BookInfoResultMap">
+    SELECT 
+        book_id, book_uuid, title, author, price, description, stock_quantity, is_available
+    FROM 
+        info_books  
+        WHERE 
+        book_id IN 
+    <foreach item="bookId" collection="bookIds" open="(" separator="," close=")">
+        #{bookId}
+    </foreach>
+  </select>
+
   <!-- 根据UUID获取主键id 包括已删除 -->
   <select id="queryIdByUuidContainDelete" resultType="java.lang.Long">
     select book_id from info_books 
     where
      book_uuid = #{uuid};
+  </select>
+
+<!-- 查询所有 在售 未删除 书籍 -->
+  <select id="selectAvailableBooksByIds" resultMap="BookInfoResultMap">
+    SELECT 
+      book_id, title, price, stock_quantity, is_available, is_deleted
+    FROM info_books
+    WHERE book_id IN
+    <foreach collection="bookIds" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    AND is_deleted = 0
+    AND is_available = 1
+  </select>
+
+<!-- 扣除库存 带行锁 -->
+  <update id="decreaseStock">
+    <![CDATA[ 
+      UPDATE info_books
+      SET stock_quantity = stock_quantity - #{quantity},
+          update_at = CURRENT_TIMESTAMP(6)
+      WHERE book_id = #{bookId}
+        AND stock_quantity >= #{quantity}
+        AND is_deleted = 0
+        AND is_available = 1
+    ]]>
+  </update>
+
+<!-- 查询UUID，扣库存错误返回 -->
+  <select id="queryUuidById">
+    SELECT book_uuid FROM info_books
+    WHERE 
+      book_id = #{bookId}
   </select>
 </mapper>

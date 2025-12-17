@@ -95,12 +95,19 @@ public class BookRepositoryImpl implements BookRepository {
 
     /**
      * 根据一组 bookId 批量查询 BookInfo
-     * @param bookIds  bookId
+     * @param bookIds  bookId Collection<Long>
      * @return 对应的 BookInfo 列表
      */
     @Override
     public List<BookInfo> queryBookInfoByIds(Collection<Long> bookIds) {
-        return sqlSessionTemplate.selectList(NAMESPACE + "queryBookInfoByIds", bookIds);
+        if (bookIds == null) {
+            throw new IllegalArgumentException("bookIds cannot be null");
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookIds", bookIds);
+        
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryBookInfoByIds", params);
     }
 
     /**
@@ -112,5 +119,76 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Long queryIdByUuidContainDelete(UUID uuid) {
         return sqlSessionTemplate.selectOne(NAMESPACE + "queryIdByUuidContainDelete", uuid);
+    }
+
+    /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * 过滤删除的和不在售的书籍
+     * 用于下单验证
+     *
+     * @param bookIds 书籍主键id List
+     * @return List<BookInfo>
+     * @apiNote 下单验证使用这个方法
+     */
+    @Override
+    public List<BookInfo> selectAvailableBooksByIds(List<Long> bookIds) {
+        if (bookIds == null) {
+            throw new IllegalArgumentException("bookIds cannot be null");
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookIds", bookIds);
+
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectAvailableBooksByIds", params);
+    }
+    
+    /**
+     * 根据一组 bookId 批量查询 BookInfo
+     * 包括删除的和不在售的书籍
+     * 用于下单验证
+     *
+     * @param bookIds 书籍主键id List
+     * @return List<BookInfo>
+     * @apiNote 订单查询使用这个方法
+     */
+    @Override
+    public List<BookInfo> queryBookInfoByIdsContainDelete(List<Long> bookIds) {
+        if (bookIds == null) {
+            throw new IllegalArgumentException("bookIds cannot be null");
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookIds", bookIds);
+
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryBookInfoByIdsContainDelete", params);
+    }
+
+    
+    /**
+     * 下单扣除商品库存
+     * 采用数据库层面的乐观锁
+     *
+     * @param bookId 书籍 ID
+     * @param quantity 扣除数量
+     * @return 受影响的行数
+     * @apiNote 如果影响行数为0，则扣除失败，需要取消订单生成
+     */
+    @Override
+    public int decreaseStock(Long bookId, Integer quantity) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+        params.put("quantity", quantity);
+
+        return sqlSessionTemplate.update(NAMESPACE + "decreaseStock", params);
+    }
+
+    /**
+     * 通过主键id查找UUID
+     * @param bookId 主键id
+     * @return uuid UUID
+     */
+    @Override
+    public UUID queryUuidById(Long bookId) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryUuidById", bookId);
     }
 }

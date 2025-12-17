@@ -6,7 +6,16 @@
 <mapper namespace="com.twt.bookstore.mapper.OrderRepository">
 
 <!-- 订单主表映射表 -->
-  <resultMap id="OrderResultMap" type="com.twt.bookstore.poju.OrderDetail">
+<resultMap id="OrderResultMap" type="com.twt.bookstore.poju.Order">
+    <id column="order_id" property="id"/>
+    <result column="order_id_time" property="orderIdTime"/>
+    <result column="user_id" property="userId"/>
+    <result column="total_price" property="totalPrice"/>
+    <result column="create_at" property="createTime"/>
+  </resultMap>
+
+<!-- 订单明细映射表 -->
+<resultMap id="OrderDetailResultMap" type="com.twt.bookstore.poju.OrderDetail">
     <id column="order_detail_id" property="id"/>
     <result column="order_id" property="orderId"/>
     <result column="book_id" property="bookId"/>
@@ -14,8 +23,8 @@
     <result column="price" property="price"/>
   </resultMap>
 
-<!-- 订单明细映射表 -->
-  <resultMap id="OrderWithDetailsResultMap" type="com.twt.bookstore.poju.Order">
+<!-- 混合查询映射表 -->
+<resultMap id="OrderWithDetailsResultMap" type="com.twt.bookstore.poju.Order">
     <id column="order_id" property="id"/>
     <result column="order_id_time" property="orderIdTime"/>
     <result column="user_id" property="userId"/>
@@ -30,7 +39,7 @@
   </resultMap>
 
 <!-- 插入订单 -->
-  <insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
+<insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO orders (
       order_id_time, 
       user_id, 
@@ -46,7 +55,7 @@
   </insert>
 
 <!-- 通过订单号查询订单 -->
-  <select id="queryOrderByIdTime" resultMap="OrderWithDetailsResultMap">
+<select id="queryOrderByIdTime" resultMap="OrderWithDetailsResultMap">
     SELECT 
       order_id, 
       order_id_time, 
@@ -60,7 +69,7 @@
   </select>
 
 <!-- 通过用户查询订单 -->
-  <select id="queryOrdersByUserId" resultMap="OrderResultMap">
+<select id="queryOrdersByUserId" resultMap="OrderResultMap">
     SELECT 
       order_id, 
       order_id_time, 
@@ -75,7 +84,7 @@
   </select>
 
 <!-- 通过订单主键id查找订单明细 -->
-  <select id="queryDetailsByOrderId" resultMap="OrderResultMap">
+<select id="queryDetailsByOrderId" resultMap="OrderDetailResultMap">
     SELECT 
       order_detail_id, 
       order_id, 
@@ -89,12 +98,12 @@
   </select>
 
 <!-- 查询订单总数量 -->
-   <select id="queryOrdersTotalCount">
+<select id="queryOrdersTotalCount">
     SELECT COUNT(order_id) FROM orders
    </select>
 
 <!-- 分页查询 -->
-   <select id="queryOrdersForPage" resultMap="OrderResultMap">
+<select id="queryOrdersWithDetailsForPage" resultMap="OrderResultMap">
     SELECT 
       order_id, 
       order_id_time, 
@@ -104,12 +113,11 @@
     FROM 
       orders
     ORDER BY create_at DESC
-    LIMIT #{offset}, #{limit} 
    </select>
 
 
 <!-- 插入订单明细 -->
-  <insert id="insertOrderDetails">
+<insert id="insertOrderDetails">
     INSERT INTO order_detail (
       order_id, 
       book_id, 

@@ -38,6 +38,7 @@ public interface OrderRepository {
 
     /**
      * 分页查询用户订单
+     * 不包括明细
      * @param offset 偏移数量
      * @param limit 页面大小
      * @return 订单列表，如果没有则返回空列表
@@ -49,7 +50,7 @@ public interface OrderRepository {
      * @param userId 所属用户的主键id
      * @return 订单总数
      */
-    Long countOrders(@Param("userId") Long userId);
+    Long countOrders(Long userId);
 
     
     // --- 订单明细表操作 ---

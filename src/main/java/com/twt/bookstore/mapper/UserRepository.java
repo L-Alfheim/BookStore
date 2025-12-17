@@ -9,9 +9,16 @@ public interface UserRepository {
     /**
      * 按照uuid 查找主键id
      * @param uuid
-     * @return result UserInfo 若不存在返回null
+     * @return id Long
      */
     Long queryIdByUUID(UUID uuid);
+
+    /**
+     * 按照主键id 查找uuid
+     * @param 主键id
+     * @return uuid UUID
+     */
+    public UUID queryUuidById(Long userId);
 
     /**
      * 按照UUID查找用户

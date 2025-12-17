@@ -16,14 +16,26 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
+    private final String NAMESPACE = "com.twt.bookstore.mapper.UserRepository.";
+
     /**
      * 按照uuid 查找主键id
      * @param uuid
-     * @return result UserInfo 若不存在返回null
+     * @return id Long
      */
     @Override
     public Long queryIdByUUID(UUID uuid) {
-        return sqlSessionTemplate.selectOne("queryIdByUUID", uuid);
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryIdByUUID", uuid);
+    }
+
+    /**
+     * 按照主键id 查找uuid
+     * @param 主键id
+     * @return uuid UUID
+     */
+    @Override
+    public UUID queryUuidById(Long userId) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryUuidById", userId);
     }
 
     /**
@@ -34,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public UserInfo queryByUUID(UUID uuid) {
-        return sqlSessionTemplate.selectOne("queryByUUID", uuid);
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryByUUID", uuid);
     }
     
     /**
@@ -44,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public UserInfo queryByUsername(String name) {
-        return sqlSessionTemplate.selectOne("queryByUsername", name);
+        return sqlSessionTemplate.selectOne(NAMESPACE + "queryByUsername", name);
     }
     
     /**
@@ -54,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public int insertUserFields(UserInfo userInfo) {
-        return sqlSessionTemplate.insert("insertUserFields", userInfo);
+        return sqlSessionTemplate.insert(NAMESPACE + "insertUserFields", userInfo);
     }
 
     /**
@@ -64,6 +76,6 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public int updateUserFields(UserInfo userInfo) {
-        return sqlSessionTemplate.update("updateUserFields", userInfo);
+        return sqlSessionTemplate.update(NAMESPACE + "updateUserFields", userInfo);
     }
 }

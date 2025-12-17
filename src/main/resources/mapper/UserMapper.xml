@@ -25,6 +25,11 @@
     select user_id from info_users where user_uuid = #{uuid} AND is_deleted = 0;
   </select>
 
+<!-- 查找用户uuid 包括已删除 订单查询 -->
+  <select id="queryUuidById" resultType="java.util.UUID">
+    select user_uuid from info_users where user_id = #{id};
+  </select>
+
 <!-- 通过UUID查找用户 -->
   <select id="queryByUUID" resultMap="UserInfoResultMap">
     select * from info_users where user_uuid = #{uuid} AND is_deleted = 0;

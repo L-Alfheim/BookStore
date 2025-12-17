@@ -53,21 +53,22 @@ public class OrderRepositoryImpl implements OrderRepository {
      */
     @Override
     public List<Order> queryOrdersByUserId(Long userId) {
-        return sqlSessionTemplate.selectOne(NAMESPACE + "queryOrdersByUserId", userId);
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryOrdersByUserId", userId);
     }
 
     /**
      * 分页查询用户订单
+     * 不包括明细
      * @param offset 偏移数量
      * @param limit 页面大小
-     * @return List<Order> 订单列表，如果没有则返回空列表
+     * @return List<Order> 订单列表
      */
     @Override
     public List<Order> queryOrdersWithDetailsForPage(int offset, int limit) {
         Map<String, Object> params = new HashMap<>();
         params.put("offset", offset);
         params.put("limit", limit);
-        return sqlSessionTemplate.selectList(NAMESPACE + "queryOrdersForPage", params);
+        return sqlSessionTemplate.selectList(NAMESPACE + "queryOrdersWithDetailsForPage", params);
     }
 
     /**

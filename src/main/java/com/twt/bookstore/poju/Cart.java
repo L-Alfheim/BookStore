@@ -2,7 +2,6 @@ package com.twt.bookstore.poju;
 
 import java.time.Instant;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
