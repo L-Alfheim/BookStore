@@ -6,12 +6,22 @@
 <mapper namespace="com.twt.bookstore.mapper.CartRepository">
 
   <resultMap id="CartResultMap" type="com.twt.bookstore.poju.Cart">
+  <!-- <constructor>
+        <idArg column="cart_id" javaType="java.lang.Long"/>
+        <arg column="user_id" javaType="java.lang.Long"/>
+        <arg column="book_id" javaType="java.lang.Long"/>
+        <arg column="item_count" javaType="java.lang.Integer"/>
+        <arg column="is_deleted" javaType="boolean"/>
+        <arg column="create_at" javaType="java.time.Instant"/>
+        <arg column="delete_at" javaType="java.time.Instant"/>
+    </constructor> -->
+
     <id column="cart_id" property="id"/>
     <result column="user_id" property="userId"/>
     <result column="book_id" property="bookId"/>
     <result column="item_count" property="itemCount"/>
     <result column="is_deleted" property="isDeleted"/>
-    <result column="created_at" property="createdAt"/>
+    <result column="create_at" property="createdAt"/>
     <result column="delete_at" property="deleteAt"/>
   </resultMap>
 
@@ -20,10 +30,8 @@
       cart_id, 
       user_id, 
       book_id, 
-      item_count,
-      is_deleted, 
-      created_at, 
-      delete_at
+      count AS item_count,
+      create_at
     FROM 
       carts 
     WHERE 
@@ -34,27 +42,25 @@
 
   <select id="queryCartsByUserId" resultMap="CartResultMap">
     SELECT 
-      cart_id, 
-      user_id, 
-      book_id, 
-      item_count,
-      is_deleted, 
-      created_at, 
-      delete_at 
-    FROM 
-      carts 
-    WHERE 
-      user_id = #{userId} 
+      cart_id,
+      user_id,
+      book_id,
+      count AS item_count,
+      is_deleted,
+      create_at,
+      delete_at
+    FROM carts
+    WHERE user_id = #{userId}
       AND is_deleted = 0
-    ORDER BY created_at DESC
+    ORDER BY create_at DESC
   </select>
 
   <insert id="insertCartItem" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO carts (
       user_id, 
       book_id, 
-      item_count,
-      created_at
+      count,
+      create_at
     ) 
     VALUES (
       #{userId}, 
@@ -82,6 +88,24 @@
     WHERE 
       user_id = #{userId}
       AND book_id = #{bookId}
+      AND is_deleted = 0
+  </update>
+
+  <update id="updateCartItemCountById">
+    UPDATE carts
+    SET 
+      count = #{itemCount}
+    WHERE 
+      cart_id = #{id}
+      AND is_deleted = 0
+  </update>
+
+  <update id="deleteAllItemByPersonId">
+    UPDATE carts
+    SET 
+      is_deleted = 1
+    WHERE 
+      user_id = #{userId}
       AND is_deleted = 0
   </update>
 </mapper>

@@ -96,26 +96,23 @@ public class CartService {
     }
 
     /**
-     * 向购物车添加商品
+     * 向购物车添加商品，如果该商品已经存在，则自动合并数量
      * @param userContext 用户身份
      * @param addRequest 添加请求
-     * @return
+     * @return BaseResponse<Void>
      * @throws ServiceException 204
      */
     public BaseResponse<Void> addOneItem(UserContext userContext, CartAddDTO addRequest) throws ServiceException {
         try {
 
             //查找人员主键id
-            System.out.println("1");
             Long userId = userRepository.queryIdByUUID(userContext.uuid());
             if (userId == null) return BaseResponse.error(404, "User is not exsit");
 
-            System.out.println("2");
             //查找书籍id
             Long bookId = bookRepository.queryIdByUUID(addRequest.uuid());
             if (bookId == null) return BaseResponse.error(404, "Book is not exsit");
 
-            System.out.println("3");
             //查找是否已存在于购物车中
             Cart OldItem = cartRepository.queryCartItemByUserIdAndBookId(userId, bookId);
             if (OldItem == null) {
@@ -131,7 +128,6 @@ public class CartService {
                 cartRepository.insertCartItem(newItem);
             } else {
                 //合并两者数量并更新
-                System.out.println("4");
                 cartRepository.updateCartItemCountById(OldItem.getId(), addRequest.quantity() + OldItem.getItemCount());
             }
 
@@ -145,7 +141,7 @@ public class CartService {
      * 删除单个购物车商品
      * @param bookUuid 书籍UUID
      * @param userContext 用户身份
-     * @return
+     * @return BaseResponse<Void>
      * @throws ServiceException 204
      */
     public BaseResponse<Void> deleteOneItem (UUID bookUuid, UserContext userContext) throws ServiceException{
@@ -163,6 +159,25 @@ public class CartService {
             return BaseResponse.success();
         } catch (Exception e) {
             throw new ServiceException(204, "error occur when deleteOneItem", e);
+        }
+    }
+
+    /**
+     * 删除购物车所有商品
+     * @param userContext 用户身份
+     * @return BaseResponse<Void>
+     * @throws ServiceException 204
+     */
+    public BaseResponse<Void> deleteAllItem(UserContext userContext) throws ServiceException {
+        try{
+            //查找人员主键id
+            Long userId = userRepository.queryIdByUUID(userContext.uuid());
+            if (userId == null) return BaseResponse.error(404, "User is not exsit");
+
+            cartRepository.deleteAllItemByPersonId(userId);
+            return BaseResponse.success();
+        } catch(Exception e) {
+            throw new ServiceException(204, "error occur when deleteAllItem");
         }
     }
 }

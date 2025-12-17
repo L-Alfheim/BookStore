@@ -114,4 +114,25 @@
           <if test="isDeleted != null">#{isDeleted},</if>
       </trim>
   </insert>
+
+  <!-- 主键id批量查询 -->
+  <select id="queryBookInfoByIds" resultMap="BookInfoResultMap">
+    SELECT 
+        book_id, book_uuid, title, author, price, description, stock_quantity, is_available
+    FROM 
+        info_books  
+        WHERE 
+        book_id IN 
+    <foreach item="bookId" collection="bookIds" open="(" separator="," close=")">
+        #{bookId}
+    </foreach>
+    AND is_deleted = 0
+  </select>
+
+  <!-- 根据UUID获取主键id 包括已删除 -->
+  <select id="queryIdByUuidContainDelete" resultType="java.lang.Long">
+    select book_id from info_books 
+    where
+     book_uuid = #{uuid};
+  </select>
 </mapper>

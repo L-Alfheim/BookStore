@@ -103,4 +103,14 @@ public class CartRepositoryImpl implements CartRepository {
 
         return sqlSessionTemplate.update(NAMESPACE + "updateCartItemCountById", params);
     }
+
+    /**
+     * 删除购物车所有商品
+     * @param uesrId 用户主键id
+     * @return 收影响的行数
+     */
+    @Override
+    public int deleteAllItemByPersonId(Long userId) {
+        return sqlSessionTemplate.update(NAMESPACE + "deleteAllItemByPersonId", userId);
+    }
 }
