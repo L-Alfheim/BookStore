@@ -155,11 +155,11 @@ public class CartService {
             if (userId == null) return BaseResponse.error(404, "User is not exsit");
     
             //查找所属购物车书籍主键id
-            Long cartId = bookRepository.queryIdByUuidContainDelete(bookUuid);
-            if (cartId == null) return BaseResponse.error(404, "Book is not exsit");
+            Long bookId = bookRepository.queryIdByUuidContainDelete(bookUuid);
+            if (bookId == null) return BaseResponse.error(404, "Book is not exsit");
 
             //执行删除
-            cartRepository.deleteCartItemById(cartId);
+            cartRepository.deleteCartItemByUserIdAndBookId(userId, bookId);
             return BaseResponse.success();
         } catch (Exception e) {
             throw new ServiceException(204, "error occur when deleteOneItem", e);
@@ -178,7 +178,7 @@ public class CartService {
             //查找人员主键id
             Long userId = userRepository.queryIdByUUID(userContext.uuid());
             if (userId == null) return BaseResponse.error(404, "User is not exsit");
-
+            
             cartRepository.deleteAllItemByPersonId(userId);
             return BaseResponse.success();
         } catch(Exception e) {

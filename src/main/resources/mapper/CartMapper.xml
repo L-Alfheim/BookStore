@@ -86,8 +86,8 @@
       is_deleted = 1,
       delete_at = UTC_TIMESTAMP(6)
     WHERE 
-      user_id = #{userId}
-      AND book_id = #{bookId}
+      user_id = #{user_id}
+      AND book_id = #{book_id}
       AND is_deleted = 0
   </update>
 

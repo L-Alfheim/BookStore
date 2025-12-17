@@ -69,7 +69,7 @@ public class CartRepositoryImpl implements CartRepository {
      */
     @Override
     public int deleteCartItemById(Long id) {
-        return sqlSessionTemplate.delete(NAMESPACE + "deleteCartItemById", id);
+        return sqlSessionTemplate.update(NAMESPACE + "deleteCartItemById", id);
 
     }
     
