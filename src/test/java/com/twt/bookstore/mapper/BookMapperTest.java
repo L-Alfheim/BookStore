@@ -24,12 +24,6 @@ class BookMapperTest {
     @Transactional
     @Rollback
     void testFindAllBooksAndDatabaseConnection() {
-        try {
-            List<BookInfo> books = bookMapper.queryByName("abc");
-        } catch (SqlException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
         System.out.println("MyBatis connect success Mapper success");
     }
 }
