@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/orders/**").hasRole("user")
 
                 //管理员订单要求admin角色
-                .requestMatchers("api/admin/orders/**").hasRole("admin")
+                .requestMatchers("/api/admin/orders/**").hasRole("admin")
 
                 // 任何其他请求（如 /admin/users）仍然需要认证
                 .anyRequest().authenticated() 
